@@ -1,4 +1,5 @@
 import csv
+import datetime
 import random
 
 no_entries_per_country = 10
@@ -23,7 +24,7 @@ def write_to_csv(file, header, data):
 
 def generate_chestie_data(start_id):
     fd_id = start_id
-    header = ['fd_id']
+    header = ['chestie_id']
     data = []
 
     for i in range(no_entries_per_country):
@@ -38,10 +39,10 @@ def generate_chestie_data(start_id):
 def generate_countries_data():
     countries = ['Romania', 'Germany', 'USA', 'Japan', 'Brazil']
     e_id = 1
-    header = ['c_id', 'country']
+    header = ['country_id', 'country']
     data = []
 
-    for i in range(no_entries_per_country):
+    for i in range(no_of_countries):
         entry = [e_id, countries[i]]
         data.append(entry)
 
@@ -88,7 +89,7 @@ def generate_food_drinks_data(start_id):
 
 def generate_social_data(start_id):
     e_id = start_id
-    header = ['fd_id', 'family_time', 'work_time', 'friends_time', 'productive_time', 'relaxing_time']
+    header = ['social_id', 'family_time', 'work_time', 'friends_time', 'productive_time', 'relaxing_time']
     data = []
 
     for i in range(no_entries_per_country):
@@ -126,7 +127,7 @@ def generate_social_data(start_id):
 
 def generate_sleep_data(start_id):
     e_id = start_id
-    header = ['fd_id', 'sleep_time', 'no_naps']
+    header = ['sleep_id', 'sleep_time', 'no_naps']
     data = []
 
     for i in range(no_entries_per_country):
@@ -148,7 +149,7 @@ def generate_sleep_data(start_id):
 
 def generate_spendings_data(start_id):
     e_id = start_id
-    header = ['fd_id', 'food_drinks', 'clothes', 'entertainment', 'others']
+    header = ['spendings_id', 'food_drinks', 'clothes', 'entertainment', 'others']
     data = []
 
     for i in range(no_entries_per_country):
@@ -188,16 +189,46 @@ def generate_spendings_data(start_id):
     write_to_csv('spendings.csv', header, data)
 
 
+def generate_happiness_data(start_id):
+    header = ['happy_id', 'current_date', 'happy_score', 'country_id', 'fd_id', 'social_id', 'sleep_id', 'spendings_id']
+    fd_id = 1
+    data = []
+    start_date = datetime.datetime.strptime('21/01/01', "%y/%m/%d")
+
+    current_date = start_date
+    for day in range(365):
+        for i in range(no_entries_per_country):
+            for c in range(no_of_countries):
+                happy_score = random.randint(1, 100)
+                p = random.randint(1, 100)
+                if p > 75:
+                    happy_score += random.randint(0, min(50, 100 - happy_score))
+                entry = [fd_id, current_date, happy_score, c + 1, start_id, start_id, start_id, start_id]
+                data.append(entry)
+
+                fd_id += 1
+                start_id += 1
+        current_date = current_date + datetime.timedelta(days=1)
+        start_id = start_id//1000*1000 + 1000
+
+    write_to_csv('happiness.csv', header, data)
+
+
 if __name__ == '__main__':
-    init_csv('countries.csv',  ['c_id', 'country'])
+    init_csv('countries.csv',  ['country_id', 'country'])
+    generate_countries_data()
     init_csv('food_drinks.csv',  ['fd_id', 'did_eat_meat', 'was_vegan', 'no_meals', 'no_snacks', 'alcohol_consumed', 'water_drank'])
-    init_csv('social.csv',  ['fd_id', 'family_time', 'work_time', 'friends_time', 'productive_time', 'relaxing_time'])
-    init_csv('sleep.csv',  ['fd_id', 'sleep_time', 'no_naps'])
-    init_csv('spendings.csv',  ['fd_id', 'food_drinks', 'clothes', 'entertainment', 'others'])
+    init_csv('social.csv',  ['social_id', 'family_time', 'work_time', 'friends_time', 'productive_time', 'relaxing_time'])
+    init_csv('sleep.csv',  ['sleep_id', 'sleep_time', 'no_naps'])
+    init_csv('spendings.csv',  ['spendings_id', 'food_drinks', 'clothes', 'entertainment', 'others'])
     start_id = 5000
     for _ in range(365):
-        generate_food_drinks_data(start_id)
-        generate_social_data(start_id)
-        generate_sleep_data(start_id)
-        generate_spendings_data(start_id)
+        # generate_food_drinks_data(start_id)
+        # generate_social_data(start_id)
+        # generate_sleep_data(start_id)
+        # generate_spendings_data(start_id)
         start_id += 1000
+
+    init_csv('happiness.csv',
+             ['happy_id', 'current_date', 'happy_score', 'country_id', 'fd_id', 'social_id', 'sleep_id', 'spendings_id'])
+    generate_happiness_data(start_id)

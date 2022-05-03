@@ -1,1 +1,6 @@
-c_id,country
+country_id,country
+1,Romania
+2,Germany
+3,USA
+4,Japan
+5,Brazil
