@@ -56,7 +56,7 @@ def generate_food_drinks_data(start_id):
     header = ['fd_id', 'did_eat_meat', 'was_vegan', 'no_meals', 'no_snacks', 'alcohol_consumed', 'water_drank']
     data = []
 
-    for i in range(no_entries_per_country):
+    for i in range(no_entries_per_country*no_of_countries):
         did_eat_meat = bool(random.randint(0, 1))
         was_vegan = not did_eat_meat
         p = random.randint(0, 100)
@@ -92,7 +92,7 @@ def generate_social_data(start_id):
     header = ['social_id', 'family_time', 'work_time', 'friends_time', 'productive_time', 'relaxing_time']
     data = []
 
-    for i in range(no_entries_per_country):
+    for i in range(no_entries_per_country*no_of_countries):
         time_available = 14
 
         p = random.randint(0, 100)
@@ -130,7 +130,7 @@ def generate_sleep_data(start_id):
     header = ['sleep_id', 'sleep_time', 'no_naps']
     data = []
 
-    for i in range(no_entries_per_country):
+    for i in range(no_entries_per_country*no_of_countries):
 
         no_naps = 0
         p = random.randint(0, 100)
@@ -152,7 +152,7 @@ def generate_spendings_data(start_id):
     header = ['spendings_id', 'food_drinks', 'clothes', 'entertainment', 'others']
     data = []
 
-    for i in range(no_entries_per_country):
+    for i in range(no_entries_per_country*no_of_countries):
         p = random.randint(0, 100)
         food_drinks = 0
         if p < 60:
@@ -197,13 +197,13 @@ def generate_happiness_data(start_id):
 
     current_date = start_date
     for day in range(365):
-        for i in range(no_entries_per_country):
+        for i in range(no_entries_per_country*no_of_countries):
             for c in range(no_of_countries):
                 happy_score = random.randint(1, 100)
                 p = random.randint(1, 100)
                 if p > 75:
                     happy_score += random.randint(0, min(50, 100 - happy_score))
-                entry = [fd_id, current_date, happy_score, c + 1, start_id, start_id, start_id, start_id]
+                entry = [fd_id, current_date.date(), happy_score, c + 1, start_id, start_id, start_id, start_id]
                 data.append(entry)
 
                 fd_id += 1
@@ -215,19 +215,19 @@ def generate_happiness_data(start_id):
 
 
 if __name__ == '__main__':
-    init_csv('countries.csv',  ['country_id', 'country'])
-    generate_countries_data()
-    init_csv('food_drinks.csv',  ['fd_id', 'did_eat_meat', 'was_vegan', 'no_meals', 'no_snacks', 'alcohol_consumed', 'water_drank'])
-    init_csv('social.csv',  ['social_id', 'family_time', 'work_time', 'friends_time', 'productive_time', 'relaxing_time'])
-    init_csv('sleep.csv',  ['sleep_id', 'sleep_time', 'no_naps'])
-    init_csv('spendings.csv',  ['spendings_id', 'food_drinks', 'clothes', 'entertainment', 'others'])
+    # init_csv('countries.csv',  ['country_id', 'country'])
+    # generate_countries_data()
+    # init_csv('food_drinks.csv',  ['fd_id', 'did_eat_meat', 'was_vegan', 'no_meals', 'no_snacks', 'alcohol_consumed', 'water_drank'])
+    # init_csv('social.csv',  ['social_id', 'family_time', 'work_time', 'friends_time', 'productive_time', 'relaxing_time'])
+    # init_csv('sleep.csv',  ['sleep_id', 'sleep_time', 'no_naps'])
+    # init_csv('spendings.csv',  ['spendings_id', 'food_drinks', 'clothes', 'entertainment', 'others'])
     start_id = 5000
-    for _ in range(365):
-        # generate_food_drinks_data(start_id)
-        # generate_social_data(start_id)
-        # generate_sleep_data(start_id)
-        # generate_spendings_data(start_id)
-        start_id += 1000
+    # for _ in range(365):
+    #     generate_food_drinks_data(start_id)
+    #     generate_social_data(start_id)
+    #     generate_sleep_data(start_id)
+    #     generate_spendings_data(start_id)
+    #     start_id += 1000
 
     init_csv('happiness.csv',
              ['happy_id', 'current_date', 'happy_score', 'country_id', 'fd_id', 'social_id', 'sleep_id', 'spendings_id'])
